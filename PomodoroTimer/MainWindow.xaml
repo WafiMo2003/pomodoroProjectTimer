@@ -1,0 +1,125 @@
+﻿<Window x:Class="PomodoroTimer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PomodoroTimer"
+        mc:Ignorable="d"
+        Title="Pomodoro" Height="450" Width="800">
+
+    <Window.CommandBindings>
+        <CommandBinding x:Name="CommandedDemarrerPomodoro"
+                        Command="{x:Static local:MainWindow.cmdDemarrerPomodoro}"
+                        CanExecute="CommandedDemarrerPomodoro_CanExecute"
+                        Executed="CommandedDemarrerPomodoro_Executed"/>
+
+
+
+        <CommandBinding x:Name="CommandeInterromprePomodoro"
+                        Command="{x:Static local:MainWindow.cmdInterromprePomodoro}"
+                        CanExecute="CommandeInterromprePomodoro_CanExecute"
+                        Executed="CommandeInterromprePomodoro_Executed"/>
+
+        <CommandBinding x:Name="CommandeAjouterTache"
+                        Command="{x:Static local:MainWindow.cmdAjouterTache}"
+                        CanExecute="ajouterTache_CanExecute"
+                        Executed="ajouterTache_Executed"/>
+
+        <CommandBinding x:Name="CommandeAjouterPomodoro"
+                        Command="{x:Static local:MainWindow.cmdAjouterPomodoro}"
+                        CanExecute="CommandeAjouterPomodoro_CanExecute"
+                        Executed="CommandeAjouterPomodoro_Executed"/>
+
+
+        <CommandBinding x:Name="CommandeDiminuerPomodoro"
+                        Command="{x:Static local:MainWindow.cmdDiminuerPomodoro}"
+                        CanExecute="CommandeDiminuerPomodoro_CanExecute"
+                        Executed="CommandeDiminuerPomodoro_Executed"/>
+        
+        <CommandBinding x:Name="CommandeSupprimerTache"
+                        Command="{x:Static local:MainWindow.cmdSupprimerTache}"
+                        CanExecute="CommandeSupprimerTache_CanExecute"
+                        Executed="CommandeSupprimerTache_Executed"/>
+
+
+    </Window.CommandBindings>
+
+    <Canvas>
+        <Canvas
+            Canvas.Left="350"
+            Canvas.Top="120">
+
+            <StackPanel Canvas.Bottom="20" Width="270">
+                <WrapPanel>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100">Statut de la tâche:</TextBlock>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100" Text="{Binding StatutTache, Mode=OneWay}" Name="statutTache"></TextBlock>
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100">Pomodoros complétés:</TextBlock>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100" Text="{Binding nbrPomodorosCompletes, Mode=OneWay}" Name="pomodorosCompletes"></TextBlock>
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100">Pomodoros prévus:</TextBlock>
+                    <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100"  Text="{Binding nbrPomodorosPrevus, Mode=OneWay}" Name="pomodorosPrevus"></TextBlock>
+                </WrapPanel>
+            </StackPanel>
+            <WrapPanel>
+                
+                <Button 
+                        Command="{x:Static local:MainWindow.cmdDemarrerPomodoro}"
+                        Content="Démarrer pomodoro"
+                        Width="150"
+                        Margin="2"/>
+
+                <Button 
+                        Command="{x:Static local:MainWindow.cmdInterromprePomodoro}"
+                        Content="Interrompre pomodoro"
+                        Width="150"
+                        Margin="2"/>
+
+            </WrapPanel>
+            <TextBlock Name="TextTemps" Text="00:00" FontSize="60" Canvas.Left="64" Canvas.Top="30"/>
+            <TextBlock FontSize="12" Margin="5" Canvas.Top="120">Nouvelle tâche:</TextBlock>
+            <TextBox Height="100" Width="320" Name="descTache" Canvas.Top="150"></TextBox>
+
+            <WrapPanel Canvas.Top="255" Canvas.Left="5">
+                <TextBlock FontSize="12" Margin="5">Prévisions (pomodoros):</TextBlock>
+                <TextBlock Name="NbrPomodorosPrevus" Margin="5">0</TextBlock>
+                <Button Margin="5" Width="20" Name="PlusUnPomodoro"  Command="{x:Static local:MainWindow.cmdAjouterPomodoro}">+</Button>
+                <Button  Margin="5" Width="20" Name="MoinsUnPomodoro" Command="{x:Static local:MainWindow.cmdDiminuerPomodoro}">-</Button>
+                <Button  Margin="5"   Command="{x:Static local:MainWindow.cmdAjouterTache}">Ajouter tâche</Button>
+
+
+            </WrapPanel>
+        </Canvas>
+
+
+        <Canvas
+             Canvas.Right="780"
+            Canvas.Top="120">
+            <StackPanel Canvas.Bottom="-250">
+                <TextBlock FontSize="12" Margin="5" Canvas.Left="19" Canvas.Top="-100">Liste des tâches:</TextBlock>
+                <ListBox Height="250" Width="300" Name="ListeTaches" Canvas.Top="-75" Canvas.Left="25" 
+                         SelectionChanged="ListeTaches_SelectionChanged"
+                         ItemsSource="{Binding TachesListe, Mode=OneWay}"></ListBox>
+                <WrapPanel>
+                    <TextBlock FontSize="12" >Filtres: </TextBlock>
+                    <StackPanel>
+                        <CheckBox Margin="5" IsChecked="True" Name="tachesEncoursCheckBox" Checked="tachesEncoursCheckBox_Checked" Unchecked="tachesEncoursCheckBox_Unchecked">
+                        <TextBlock x:Name="tachesEnCours">Tâches en cours</TextBlock>
+                    </CheckBox>
+                        <CheckBox Margin="5" IsChecked="True" Name="tachesPlanifieesCheckBox" Checked="tachesPlanifieesCheckBox_Checked" Unchecked="tachesPlanifieesCheckBox_Unchecked">
+                            <TextBlock x:Name="tachesPlanifiees">Tâches planifiées</TextBlock>
+                        </CheckBox>
+                        <CheckBox Margin="5" IsChecked="False" Name="tachesCompleteesCheckBox" Checked="tachesCompleteesCheckBox_Checked" Unchecked="tachesCompleteesCheckBox_Unchecked">
+                            <TextBlock x:Name="tachesCompletees">Tâches complétées</TextBlock>
+                        </CheckBox>
+                        <Button Width="150" Margin="2" Height="20" Command="{x:Static local:MainWindow.cmdSupprimerTache}">Supprimer la tâche</Button>
+                    </StackPanel>
+                </WrapPanel>
+            </StackPanel>
+
+        </Canvas>
+
+    </Canvas>
+</Window>
